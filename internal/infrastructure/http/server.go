@@ -56,6 +56,11 @@ func NewServer(
 	svr.engine.Use(middleware.CorsMiddleware())
 	svr.engine.Use(middleware.ErrorHandler)
 	infrastructure.Container(db, svr.engine)
+	svr.engine.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "404 page not found",
+		})
+	})
 	return serverContext(ctx), svr
 }
 

@@ -18,6 +18,14 @@ func (r *Response) Success(status string, data interface{}) Response {
 	}
 }
 
+func (r *Response) SuccessWithMessage(status, message string, data interface{}) Response {
+	return Response{
+		Status:  status,
+		Message: message,
+		Data:    data,
+	}
+}
+
 func (r *Response) Error(status string, message string, error interface{}) Response {
 	return Response{
 		Status:  status,
