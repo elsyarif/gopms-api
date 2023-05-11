@@ -26,6 +26,7 @@ func (h *ServerHandler) Routes(app *gin.Engine) {
 
 	server.POST("", h.PostServerHandler)
 	server.GET("/:serverId", h.GetServerById)
+	server.GET("/:serverId/disks", h.GetServerDisk)
 	server.PUT("/:serverId", h.PutServerHandler)
 	server.DELETE("/:serverId", h.DeleteServerHandler)
 }
@@ -97,4 +98,18 @@ func (h *ServerHandler) DeleteServerHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helper.ResponseJSON.SuccessWithMessage("success", "server berhasil dihapus", nil))
+}
+
+func (h *ServerHandler) GetServerDisk(c *gin.Context) {
+	ctx := context.Background()
+	serverId := c.Param("serverId")
+
+	server, err := h.serverUseCase.GetServerDisk(ctx, serverId)
+	if err != nil {
+		appError := common.NewError(err, common.NotFoundError)
+		c.Error(appError)
+		return
+	}
+
+	c.JSON(http.StatusOK, helper.ResponseJSON.Success("success", server))
 }

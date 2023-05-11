@@ -38,6 +38,26 @@ func (u *ServerUseCase) DeleteServer(ctx context.Context, serverId string) error
 	return u.serverService.DeleteServer(ctx, serverId)
 }
 
-func (u *ServerUseCase) GetServerDisk(ctx context.Context, serverId string) (*[]entities.Disk, error) {
-	return u.diskService.GetAllDiskByServerId(ctx, serverId)
+func (u *ServerUseCase) GetServerDisk(ctx context.Context, serverId string) (*entities.ServerDisk, error) {
+	server, err := u.serverService.GetServerById(ctx, serverId)
+	if err != nil {
+		return nil, err
+	}
+	disks, err := u.diskService.GetAllDiskByServerId(ctx, serverId)
+	if err != nil {
+		return nil, err
+	}
+
+	sd := entities.ServerDisk{
+		Id:         server.Id,
+		GroupId:    server.GroupId,
+		ServerName: server.ServerName,
+		Location:   server.Location,
+		Status:     server.Status,
+		Memory:     server.Memory,
+		Ip:         server.Id,
+		Disk:       disks,
+	}
+
+	return &sd, nil
 }

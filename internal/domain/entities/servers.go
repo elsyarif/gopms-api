@@ -9,3 +9,14 @@ type Server struct {
 	Memory     int    `json:"memory,omitempty" db:"memory" form:"memory" binding:"required"`
 	Ip         string `json:"ip,omitempty" db:"ip" form:"ip" binding:"required"`
 }
+
+type ServerDisk struct {
+	Id         string  `json:"id,omitempty"`
+	GroupId    string  `json:"group_id,omitempty"`
+	ServerName string  `json:"server_name,omitempty"`
+	Location   string  `json:"location,omitempty"`
+	Status     string  `json:"status,omitempty"`
+	Memory     int     `json:"memory,omitempty"`
+	Ip         string  `json:"ip,omitempty"`
+	Disk       *[]Disk `json:"disk,omitempty"`
+}
