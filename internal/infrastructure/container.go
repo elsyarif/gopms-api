@@ -14,26 +14,34 @@ import (
 func Container(db *sqlx.DB, app *gin.Engine) {
 	idGenerator := uid.NewNanoId()
 	hash := encryption.PasswordHash()
-	// User
+
+	// repository
 	userRepository := repositories.NewUserRepositoryPostgres(db)
-	userService := services.NewUserService(userRepository, idGenerator, hash)
-	userUseCase := usecases.NewUserUseCase(userService)
-	userHandler := handler.NewUserHandler(userUseCase)
-
-	// authentication
 	authRepository := repositories.NewAuthRepositoryPostgres(db)
-	authService := services.NewAuthService(authRepository, userRepository, hash)
-	authUseCae := usecases.NewAuthUseCase(authService, userService)
-	authHandler := handler.NewAuthHandler(authUseCae)
-
-	// group
 	groupRepository := repositories.NewGroupRepositoryPostgres(db)
+	serverRepository := repositories.NewServerRepositoryPostgres(db)
+
+	// services
+	userService := services.NewUserService(userRepository, idGenerator, hash)
+	authService := services.NewAuthService(authRepository, userRepository, hash)
 	groupService := services.NewGroupService(groupRepository, idGenerator)
+	serverService := services.NewServerService(serverRepository, idGenerator)
+
+	// useCase
+	userUseCase := usecases.NewUserUseCase(userService)
+	authUseCae := usecases.NewAuthUseCase(authService, userService)
 	groupUseCase := usecases.NewGroupUseCase(groupService)
-	groupHandler := handler.NewGroupHandler(groupUseCase)
+	serverUseCase := usecases.NewServerUseCase(serverService)
+
+	// handler
+	userHandler := handler.NewUserHandler(userUseCase)
+	authHandler := handler.NewAuthHandler(authUseCae)
+	groupHandler := handler.NewGroupHandler(groupUseCase, serverUseCase)
+	serverHandler := handler.NewServerHandler(serverUseCase)
 
 	// routes
 	userHandler.Routes(app)
 	authHandler.Routes(app)
 	groupHandler.Routes(app)
+	serverHandler.Routes(app)
 }

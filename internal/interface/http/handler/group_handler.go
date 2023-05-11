@@ -12,12 +12,14 @@ import (
 )
 
 type GroupHandler struct {
-	groupUseCase usecases.GroupUseCase
+	groupUseCase  usecases.GroupUseCase
+	serverUseCase usecases.ServerUseCase
 }
 
-func NewGroupHandler(gu usecases.GroupUseCase) GroupHandler {
+func NewGroupHandler(gu usecases.GroupUseCase, su usecases.ServerUseCase) GroupHandler {
 	return GroupHandler{
-		groupUseCase: gu,
+		groupUseCase:  gu,
+		serverUseCase: su,
 	}
 }
 
@@ -27,6 +29,7 @@ func (h *GroupHandler) Routes(app *gin.Engine) {
 	group.POST("", h.PostGroupHandler)
 	group.GET("", h.GetGroupHandler)
 	group.GET("/:groupId", h.GetBuyIdGroupHandler)
+	group.GET("/:groupId/servers", h.GetAllServerByGroup)
 	group.PUT("/:groupId", h.PutGroupHandler)
 	group.DELETE("/:groupId", h.DeleteGroupHandler)
 }
@@ -74,6 +77,20 @@ func (h *GroupHandler) GetBuyIdGroupHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helper.ResponseJSON.Success("success", group))
+}
+
+func (h *GroupHandler) GetAllServerByGroup(c *gin.Context) {
+	ctx := context.Background()
+	groupId := c.Param("groupId")
+
+	server, err := h.serverUseCase.GetAllServerByGroup(ctx, groupId)
+	if err != nil {
+		appError := common.NewError(err, common.NotFoundError)
+		c.Error(appError)
+		return
+	}
+
+	c.JSON(http.StatusOK, helper.ResponseJSON.Success("success", server))
 }
 
 func (h *GroupHandler) PutGroupHandler(c *gin.Context) {

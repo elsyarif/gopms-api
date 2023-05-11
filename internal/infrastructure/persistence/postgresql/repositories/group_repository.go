@@ -8,6 +8,7 @@ import (
 	"github.com/elsyarif/pms-api/pkg/helper/log"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
+	"strings"
 )
 
 type GroupRepositoryPostgres struct {
@@ -44,7 +45,7 @@ func (g *GroupRepositoryPostgres) AddGroup(ctx context.Context, group entities.G
 }
 
 func (g *GroupRepositoryPostgres) GetAllGroup(ctx context.Context, name string) (*[]entities.Group, error) {
-	query := "SELECT * FROM groups WHERE name like $1"
+	query := "SELECT * FROM groups WHERE lower(name) like $1"
 	var groups []entities.Group
 
 	tx, err := g.DB.Beginx()
@@ -52,7 +53,7 @@ func (g *GroupRepositoryPostgres) GetAllGroup(ctx context.Context, name string) 
 		return nil, err
 	}
 
-	err = tx.SelectContext(ctx, &groups, query, "%"+name+"%")
+	err = tx.SelectContext(ctx, &groups, query, "%"+strings.ToLower(name)+"%")
 	if err != nil {
 		log.Error("GetAllGroup error", logrus.Fields{"error": err.Error()})
 		return nil, errors.New("group not found")

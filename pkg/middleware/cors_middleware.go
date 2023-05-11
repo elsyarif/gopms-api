@@ -1,16 +1,12 @@
 package middleware
 
 import (
-	"github.com/elsyarif/pms-api/pkg/helper/log"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
-		log.Info("origin", logrus.Fields{"origin": origin})
-
 		if origin != "" && isAllowedOrigin(origin) {
 			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
 			c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")

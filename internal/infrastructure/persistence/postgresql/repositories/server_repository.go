@@ -92,14 +92,14 @@ func (s *ServerRepositoryPostgres) GetServerById(ctx context.Context, serverId s
 
 	err = tx.GetContext(ctx, &server, query, serverId)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("server not found")
 	}
 
 	return &server, nil
 }
 
 func (s *ServerRepositoryPostgres) EditServer(ctx context.Context, serverId string, server entities.Server) error {
-	query := "UPDATE servers set server_name = $1, location = $2, status = $3, memory = $4, ip= $4 WHERE id = $5"
+	query := "UPDATE servers set server_name = $1, location = $2, status = $3, memory = $4, ip= $5 WHERE id = $6"
 
 	tx, err := s.DB.Beginx()
 	if err != nil {
