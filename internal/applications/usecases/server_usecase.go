@@ -8,10 +8,14 @@ import (
 
 type ServerUseCase struct {
 	serverService services.ServerService
+	diskService   services.DiskService
 }
 
-func NewServerUseCase(su services.ServerService) ServerUseCase {
-	return ServerUseCase{serverService: su}
+func NewServerUseCase(su services.ServerService, ds services.DiskService) ServerUseCase {
+	return ServerUseCase{
+		serverService: su,
+		diskService:   ds,
+	}
 }
 
 func (u *ServerUseCase) AddServer(ctx context.Context, server entities.Server) (*entities.Server, error) {
@@ -32,4 +36,8 @@ func (u *ServerUseCase) EditServer(ctx context.Context, serverId string, server 
 
 func (u *ServerUseCase) DeleteServer(ctx context.Context, serverId string) error {
 	return u.serverService.DeleteServer(ctx, serverId)
+}
+
+func (u *ServerUseCase) GetServerDisk(ctx context.Context, serverId string) (*[]entities.Disk, error) {
+	return u.diskService.GetAllDiskByServerId(ctx, serverId)
 }
