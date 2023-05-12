@@ -57,6 +57,10 @@ func (d *DiskRepositoryPostgres) GetAllDiskByServerId(ctx context.Context, serve
 		return nil, err
 	}
 
+	if len(disks) < 1 {
+		disks = []entities.Disk{}
+	}
+
 	return &disks, nil
 }
 

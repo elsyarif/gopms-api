@@ -12,7 +12,7 @@ type Server struct {
 
 type ServerDisk struct {
 	Id         string  `json:"id,omitempty"`
-	GroupId    string  `json:"group_id,omitempty"`
+	GroupName  string  `json:"group_name,omitempty"`
 	ServerName string  `json:"server_name,omitempty"`
 	Location   string  `json:"location,omitempty"`
 	Status     string  `json:"status,omitempty"`

@@ -33,7 +33,7 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	userUseCase := usecases.NewUserUseCase(userService)
 	authUseCae := usecases.NewAuthUseCase(authService, userService)
 	groupUseCase := usecases.NewGroupUseCase(groupService)
-	serverUseCase := usecases.NewServerUseCase(serverService, diskService)
+	serverUseCase := usecases.NewServerUseCase(serverService, diskService, groupService)
 	diskUseCase := usecases.NewDiskUseCase(diskService)
 
 	// handler

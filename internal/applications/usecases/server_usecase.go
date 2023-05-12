@@ -9,12 +9,14 @@ import (
 type ServerUseCase struct {
 	serverService services.ServerService
 	diskService   services.DiskService
+	groupService  services.GroupService
 }
 
-func NewServerUseCase(su services.ServerService, ds services.DiskService) ServerUseCase {
+func NewServerUseCase(su services.ServerService, ds services.DiskService, gs services.GroupService) ServerUseCase {
 	return ServerUseCase{
 		serverService: su,
 		diskService:   ds,
+		groupService:  gs,
 	}
 }
 
@@ -48,9 +50,11 @@ func (u *ServerUseCase) GetServerDisk(ctx context.Context, serverId string) (*en
 		return nil, err
 	}
 
+	group, err := u.groupService.GetGroupById(ctx, server.GroupId)
+
 	sd := entities.ServerDisk{
 		Id:         server.Id,
-		GroupId:    server.GroupId,
+		GroupName:  group.Name,
 		ServerName: server.ServerName,
 		Location:   server.Location,
 		Status:     server.Status,
