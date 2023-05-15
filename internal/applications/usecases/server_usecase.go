@@ -59,7 +59,7 @@ func (u *ServerUseCase) GetServerDisk(ctx context.Context, serverId string) (*en
 		Location:   server.Location,
 		Status:     server.Status,
 		Memory:     server.Memory,
-		Ip:         server.Id,
+		Ip:         server.Ip,
 		Disk:       disks,
 	}
 

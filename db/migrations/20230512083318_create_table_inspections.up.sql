@@ -13,8 +13,8 @@ CREATE TABLE inspection_server (
     inspection_id varchar(36) not null ,
     server_id varchar(36) not null ,
     server_name varchar(50) not null ,
-    cpu_usage int not null default 0,
-    memory_usage int not null default 0
+    cpu_usage numeric(5,2) not null default 0,
+    memory_usage numeric(5,2) not null default 0
 );
 
 CREATE TABLE inspection_disk (
@@ -23,7 +23,7 @@ CREATE TABLE inspection_disk (
     inspection_server_id varchar(36) not null ,
     disk_id varchar(36) not null ,
     disk_name varchar(10) not null ,
-    disk_usage int not null default 0
+    disk_usage numeric(5,2) not null default 0
 );
 
 ALTER TABLE inspections ADD FOREIGN KEY ("group_id") REFERENCES groups("id");

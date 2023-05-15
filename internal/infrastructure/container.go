@@ -21,6 +21,7 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	groupRepository := repositories.NewGroupRepositoryPostgres(db)
 	serverRepository := repositories.NewServerRepositoryPostgres(db)
 	diskRepository := repositories.NewDiskRepositoryPostgres(db)
+	inspectionRepository := repositories.NewInspectionRepositoryPostgres(db)
 
 	// services
 	userService := services.NewUserService(userRepository, idGenerator, hash)
@@ -28,6 +29,7 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	groupService := services.NewGroupService(groupRepository, idGenerator)
 	serverService := services.NewServerService(serverRepository, idGenerator)
 	diskService := services.NewDiskService(diskRepository, idGenerator)
+	inspectionService := services.NewInspectionService(inspectionRepository, idGenerator)
 
 	// useCase
 	userUseCase := usecases.NewUserUseCase(userService)
@@ -35,6 +37,7 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	groupUseCase := usecases.NewGroupUseCase(groupService)
 	serverUseCase := usecases.NewServerUseCase(serverService, diskService, groupService)
 	diskUseCase := usecases.NewDiskUseCase(diskService)
+	inspectionUseCase := usecases.NewInspectionUseCase(inspectionService)
 
 	// handler
 	userHandler := handler.NewUserHandler(userUseCase)
@@ -42,6 +45,7 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	groupHandler := handler.NewGroupHandler(groupUseCase, serverUseCase)
 	serverHandler := handler.NewServerHandler(serverUseCase)
 	diskHandler := handler.NewDiskHandler(diskUseCase)
+	inspectionHandler := handler.NewInspectionHandler(inspectionUseCase)
 
 	// routes
 	userHandler.Routes(app)
@@ -49,4 +53,5 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	groupHandler.Routes(app)
 	serverHandler.Routes(app)
 	diskHandler.Routes(app)
+	inspectionHandler.Routes(app)
 }
