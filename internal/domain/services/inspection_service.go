@@ -22,11 +22,11 @@ func NewInspectionService(ir repository.InspectionRepository, uid uid.NanoGenera
 func (s *InspectionService) CreateInspection(ctx context.Context, inspection entities.InspectionRequest) (*string, error) {
 	inspection.Id = s.idGenerator.NanoId("inspect")
 
-	for _, i := range inspection.InspectionDetail {
-		i.Id = s.idGenerator.NanoId("i-detail")
+	for i1, i := range inspection.InspectionDetail {
+		inspection.InspectionDetail[i1].Id = s.idGenerator.NanoId("i-detail")
 
-		for _, j := range i.InspectionDisk {
-			j.Id = s.idGenerator.NanoId("i-disk")
+		for i2, _ := range i.InspectionDisk {
+			inspection.InspectionDetail[i1].InspectionDisk[i2].Id = s.idGenerator.NanoId("i-disk")
 		}
 	}
 
