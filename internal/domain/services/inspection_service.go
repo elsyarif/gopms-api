@@ -37,3 +37,7 @@ func (s *InspectionService) CreateInspection(ctx context.Context, inspection ent
 
 	return &inspection.Id, nil
 }
+
+func (s *InspectionService) GetInspectionByGroupId(ctx context.Context, groupId string, periodStart string, periodEnd string) (*entities.InspectionResponse, error) {
+	return s.inspectionRepo.GetInspection(ctx, groupId, periodStart, periodEnd)
+}

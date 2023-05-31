@@ -27,7 +27,7 @@ type InspectionDisk struct {
 	InspectionServerId string  `json:"inspection_server_id,omitempty" db:"inspection_server_id"`
 	DiskId             string  `json:"disk_id,omitempty" db:"disk_id" bind:"required"`
 	DiskName           string  `json:"disk_name,omitempty" db:"disk_name" bind:"required"`
-	DiskUsage          float32 `json:"disk_usage,omitempty" db:"disk_usage" bind:"required"`
+	DiskUsage          float32 `json:"disk_usage" db:"disk_usage" bind:"required"`
 }
 
 type InspectionRequest struct {
@@ -48,4 +48,15 @@ type InspectionRequestDetail struct {
 	CpuUsage       float32          `json:"cpu_usage,omitempty" bind:"required"`
 	MemoryUsage    float32          `json:"memory_usage,omitempty" bind:"required"`
 	InspectionDisk []InspectionDisk `json:"inspection_disk,omitempty"`
+}
+
+type InspectionResponse struct {
+	Id               string                    `json:"id,omitempty"`
+	GroupId          string                    `json:"group_id,omitempty"`
+	GroupName        string                    `json:"group_name,omitempty"`
+	Date             time.Time                 `json:"date"`
+	UserBy           string                    `json:"user_by,omitempty"`
+	PeriodStart      time.Time                 `json:"period_start"`
+	PeriodEnd        time.Time                 `json:"period_end"`
+	InspectionDetail []InspectionRequestDetail `json:"inspection_detail,omitempty"`
 }

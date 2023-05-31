@@ -38,6 +38,7 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	serverUseCase := usecases.NewServerUseCase(serverService, diskService, groupService)
 	diskUseCase := usecases.NewDiskUseCase(diskService)
 	inspectionUseCase := usecases.NewInspectionUseCase(inspectionService)
+	reportUseCase := usecases.NewReportUseCase(inspectionService)
 
 	// handler
 	userHandler := handler.NewUserHandler(userUseCase)
@@ -46,6 +47,7 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	serverHandler := handler.NewServerHandler(serverUseCase)
 	diskHandler := handler.NewDiskHandler(diskUseCase)
 	inspectionHandler := handler.NewInspectionHandler(inspectionUseCase)
+	reportHandler := handler.NewReportHandler(reportUseCase)
 
 	// routes
 	userHandler.Routes(app)
@@ -54,4 +56,5 @@ func Container(db *sqlx.DB, app *gin.Engine) {
 	serverHandler.Routes(app)
 	diskHandler.Routes(app)
 	inspectionHandler.Routes(app)
+	reportHandler.Routes(app)
 }
